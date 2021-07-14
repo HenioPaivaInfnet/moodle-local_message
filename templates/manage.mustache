@@ -27,4 +27,9 @@
     }
 
 }}
-<p>{{texttodisplay}}</p>
+<h1>Lista de mensagens</h1>
+{{#messages}}
+    <p>{{messagetext}}</p>
+{{/messages}}
+<hr>
+<input type="button" class="btn btn-primary" value="Criar messagem" onclick="location.href='{{editurl}}'">

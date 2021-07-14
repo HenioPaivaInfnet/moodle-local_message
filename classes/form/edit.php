@@ -34,6 +34,15 @@ class edit extends moodleform{
         $mform->setType('messagetext', PARAM_NOTAGS);
         $mform->setDefault('messagetext', 'prenche o texto');
         
+        
+        $choices = array();
+        $choices['0'] = \core\output\notification::NOTIFY_INFO;
+        $choices['1'] = \core\output\notification::NOTIFY_SUCCESS;
+        $choices['2'] = \core\output\notification::NOTIFY_WARNING;
+        $choices['3'] = \core\output\notification::NOTIFY_ERROR;
+        $mform->addElement('select', 'messagetype', 'Message type', $choices);
+        $mform->setDefault('messagetype', '0');
+        $this->add_action_buttons();
     }
 
     function validation($data, $files){
