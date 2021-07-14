@@ -24,16 +24,15 @@
 
 
 require_once(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot . '/local/message/classes/form/edit.php');
 $PAGE->set_url(new moodle_url('/local/message/manage.php'));
 $PAGE->set_context(\context_system::instance());
-$PAGE->set_title('Gerenciar mensagens');
+$PAGE->set_title('Edição de mensagens');
+
+$mform = new edit();
 
 echo $OUTPUT->header();
 
-$templatecontext = (object)[
-    'texttodisplay' => 'Lista de todas as mensagens',
-];
-
-echo $OUTPUT->render_from_template('local_message/manage', $templatecontext);
+$mform->display();
 
 echo $OUTPUT->footer();

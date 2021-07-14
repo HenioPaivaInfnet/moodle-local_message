@@ -22,18 +22,21 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+global $CFG;
+require_once("$CFG->libdir/formslib.php");
 
-require_once(__DIR__ . '/../../config.php');
-$PAGE->set_url(new moodle_url('/local/message/manage.php'));
-$PAGE->set_context(\context_system::instance());
-$PAGE->set_title('Gerenciar mensagens');
+class edit extends moodleform{
 
-echo $OUTPUT->header();
+    public function definition(){
+        $mform = $this->_form;
+    
+        $mform->addElement('text', 'messagetext', 'texto da messagem');
+        $mform->setType('messagetext', PARAM_NOTAGS);
+        $mform->setDefault('messagetext', 'prenche o texto');
+        
+    }
 
-$templatecontext = (object)[
-    'texttodisplay' => 'Lista de todas as mensagens',
-];
-
-echo $OUTPUT->render_from_template('local_message/manage', $templatecontext);
-
-echo $OUTPUT->footer();
+    function validation($data, $files){
+        return array();
+    }
+}
