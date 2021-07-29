@@ -30,9 +30,9 @@ class edit extends moodleform{
     public function definition(){
         $mform = $this->_form;
     
-        $mform->addElement('text', 'messagetext', 'texto da messagem');
+        $mform->addElement('text', 'messagetext', get_string('message_text','local_message'));
         $mform->setType('messagetext', PARAM_NOTAGS);
-        $mform->setDefault('messagetext', 'prenche o texto');
+        $mform->setDefault('messagetext', get_string('message_content', 'local_message'));
         
         
         $choices = array();
@@ -40,7 +40,7 @@ class edit extends moodleform{
         $choices['1'] = \core\output\notification::NOTIFY_SUCCESS;
         $choices['2'] = \core\output\notification::NOTIFY_WARNING;
         $choices['3'] = \core\output\notification::NOTIFY_ERROR;
-        $mform->addElement('select', 'messagetype', 'Message type', $choices);
+        $mform->addElement('select', 'messagetype', get_string('message_type','local_message'), $choices);
         $mform->setDefault('messagetype', '0');
         $this->add_action_buttons();
     }

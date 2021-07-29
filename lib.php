@@ -22,24 +22,15 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+require_once('classes/maneger.php');
+
 function local_message_before_footer() {
     global $DB, $USER;
 
-    //$messages = $DB->get_records('local_message');
-
-    $sql = "SELECT lm.id, lm.messagetext, lm.messagetype
-            FROM {local_message} lm 
-            left join {local_message_read} lmr
-            on lm.id=lmr.messageid
-            where lmr.userid IS NULL
-            ";
-
-    $params = [
-        'userid' => $USER->id,
-    ];
-
-    $messages = $DB->get_records_sql($sql, $params);
-
+    $maneger = new maneger();
+    $messages = $maneger->get_messages($USER->id);
+     
     foreach($messages as $message){
         $type = \core\output\notification::NOTIFY_INFO;
         if($message->messagetype === '1'){

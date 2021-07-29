@@ -24,7 +24,8 @@
 
 
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot . '/local/message/classes/form/edit.php');
+require_once('classes/form/edit.php');
+require_once('classes/maneger.php');
 
 global $DB;
 
@@ -33,17 +34,14 @@ $PAGE->set_context(\context_system::instance());
 $PAGE->set_title('Edição de mensagens');
 
 $mform = new edit();
+$maneger = new maneger();
 
 if($mform->is_cancelled()){
-    redirect($CFG->wwwroot . '/local/message/manage.php', 'voce cancelou bla bla');
+    redirect($CFG->wwwroot . '/local/message/manage.php', get_string('cancelled_form', 'local_message'));
 }
 else if($fromform = $mform->get_data()){
-    $recordtoinsert = new stdClass();
-    $recordtoinsert->messagetext = $fromform->messagetext;
-    $recordtoinsert->messagetype = $fromform->messagetype;
-
-    $DB->insert_record('local_message', $recordtoinsert);
-    redirect($CFG->wwwroot . '/local/message/manage.php', 'voce cancelou bla bla');
+    $maneger->create_message($fromform->messagetext, $fromform->messagetype);
+    redirect($CFG->wwwroot . '/local/message/manage.php', get_string('sucessed_form', 'local_message'));
 }
 
 
