@@ -24,7 +24,6 @@
 
 
 require_once(__DIR__ . '/../../config.php');
-require_once('classes/maneger.php');
 global $DB;
 
 $PAGE->set_url(new moodle_url('/local/message/manage.php'));

@@ -22,7 +22,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class maneger{
+namespace local_message;
+
+use stdClass;
+use dml_exception;
+
+class manager{
 
     public function create_message($messagetext, $messagetype): bool
     {
@@ -40,12 +45,10 @@ class maneger{
 
     public function get_messages($userid){
         global $DB;
-        $sql = "SELECT lm.id, lm.messagetext, lm.messagetype
+        $sql = "SELECT lm.id, lm.messagetext, lm.messagetype 
             FROM {local_message} lm 
-            left join {local_message_read} lmr
-            on lm.id=lmr.messageid
-            where lmr.userid IS NULL
-            ";
+            LEFT OUTER JOIN {local_message_read} lmr ON lm.id = lmr.messageid AND lmr.userid = :userid 
+            WHERE lmr.userid IS NULL";
 
         $params = [
             'userid' => $userid,
@@ -56,5 +59,19 @@ class maneger{
         catch(dml_exception $e){
             return [];
         }
+    }
+
+    public function mark_message_read($messageid, $userid){
+        global $DB;
+        $readrecord = new stdClass();
+        $readrecord->messageid = $messageid;
+        $readrecord->userid = $userid;
+        $readrecord->timeread = time();
+        try{
+           return $DB->insert_record('local_message_read', $readrecord, false);
+        }catch(dml_exception $e){
+            return false;
+        }
+        
     }
 }

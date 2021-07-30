@@ -22,10 +22,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_message\manager;
+use local_message\form\edit;
 
 require_once(__DIR__ . '/../../config.php');
 require_once('classes/form/edit.php');
-require_once('classes/maneger.php');
 
 global $DB;
 
@@ -34,13 +35,13 @@ $PAGE->set_context(\context_system::instance());
 $PAGE->set_title('Edição de mensagens');
 
 $mform = new edit();
-$maneger = new maneger();
+$manager = new manager();
 
 if($mform->is_cancelled()){
     redirect($CFG->wwwroot . '/local/message/manage.php', get_string('cancelled_form', 'local_message'));
 }
 else if($fromform = $mform->get_data()){
-    $maneger->create_message($fromform->messagetext, $fromform->messagetype);
+    $manager->create_message($fromform->messagetext, $fromform->messagetype);
     redirect($CFG->wwwroot . '/local/message/manage.php', get_string('sucessed_form', 'local_message'));
 }
 

@@ -22,9 +22,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_message\manager;
 global $CFG;
 require_once($CFG->dirroot . '/local/message/lib.php');
-require_once($CFG->dirroot . '/local/message/classes/maneger.php');
 
 class local_message_manager_test extends advanced_testcase
 {
@@ -34,12 +34,12 @@ class local_message_manager_test extends advanced_testcase
     public function test_create_message(){
         $this->resetAfterTest();
         $this->setUser(2);
-        $manager = new maneger();
+        $manager = new manager();
         $messages = $manager->get_messages(2);
         $this->assertEmpty($messages);
 
         $type = \core\output\notification::NOTIFY_SUCCESS;
-        $result =$manager->create_message('Test message', $type);
+        $result = $manager->create_message('Test message', $type);
 
         $this->assertTrue($result);
         $messages = $manager->get_messages(2);

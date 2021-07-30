@@ -22,14 +22,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_message\manager;
 defined('MOODLE_INTERNAL') || die();
-require_once('classes/maneger.php');
 
 function local_message_before_footer() {
-    global $DB, $USER;
+    global $USER;
 
-    $maneger = new maneger();
-    $messages = $maneger->get_messages($USER->id);
+    $manager = new manager();
+    $messages = $manager->get_messages($USER->id);
      
     foreach($messages as $message){
         $type = \core\output\notification::NOTIFY_INFO;
@@ -44,10 +44,6 @@ function local_message_before_footer() {
         }
         \core\notification::add($message->messagetext, $type);
 
-        $readrecord = new stdClass();
-        $readrecord->messageid = $message->id;
-        $readrecord->userid = $USER->id;
-        $readrecord->timeread = time();
-        $DB->insert_record('local_message_read', $readrecord);
+        $manager->mark_message_read($message->id, $USER->id);
     }
 }
