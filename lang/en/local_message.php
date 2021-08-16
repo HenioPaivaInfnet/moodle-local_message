@@ -22,9 +22,16 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Message notify';
+$string['pluginname'] = 'Broadcast messages';
+$string['manage'] = ' Manage broadcast messages';
+$string['message:managemessages'] = 'Allow user Manage broadcast messages';
 $string['message_text'] = 'Message text';
 $string['message_type'] = 'Type of message';
 $string['message_content'] = 'content of message';
 $string['cancelled_form'] = 'Message cancelled';
 $string['sucessed_form'] = 'New message created';
+$string['updated_form'] = 'Message updated';
+$string['delete_message'] = 'Delete message';
+$string['delete_message_confirm'] = 'Confirm message deletion?';
+$string['delete_message_failed'] = 'Message deletion failed';
+

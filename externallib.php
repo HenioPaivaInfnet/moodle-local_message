@@ -15,8 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Arquivos que criar funções callback do Moodle 
- * além de ser um arquivo obrigatorio para todos os plugins
+ * Version details
  *
  * @package   local_message
  * @copyright Henio
@@ -24,30 +23,30 @@
  */
 
 use local_message\manager;
+
 defined('MOODLE_INTERNAL') || die();
 
-function local_message_before_footer() {
-    global $USER;
-    if(!get_config('local_message', 'enabled')){
-        return;
+require_once($CFG->libdir . '/externallib.php');
+
+class local_message_external extends external_api {
+    /**
+     * Parametros requiridos pela api para executar função
+     * @return external_funciotion_parameters
+     */
+    public static function delete_message_parameters(){
+        return new external_function_parameters(
+            ['messageid' => new external_value(PARAM_INT, 'id of message')],
+        );
     }
 
-    $manager = new manager();
-    $messages = $manager->get_messages($USER->id);
-     
-    foreach($messages as $message){
-        $type = \core\output\notification::NOTIFY_INFO;
-        if($message->messagetype === '1') {
-            $type = \core\output\notification::NOTIFY_SUCCESS;
-        }
-        if($message->messagetype === '2') {
-            $type = \core\output\notification::NOTIFY_WARNING;
-        }
-        if($message->messagetype === '3') {
-            $type = \core\output\notification::NOTIFY_ERROR;
-        }
-        \core\notification::add($message->messagetext, $type);
+    public static function delete_message($messageid) {
+        $params = self::validate_parameters(self::delete_message_parameters(), array('messageid'=>$messageid));
 
-        $manager->mark_message_read($message->id, $USER->id);
+        $manager = new manager();
+        return $manager->delete_message($messageid);
+    }
+
+    public static function delete_message_returns() {
+        return new external_value(PARAM_BOOL, 'True if message deleted');
     }
 }

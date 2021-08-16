@@ -26,12 +26,11 @@ use local_message\manager;
 global $CFG;
 require_once($CFG->dirroot . '/local/message/lib.php');
 
-class local_message_manager_test extends advanced_testcase
-{
+class local_message_manager_test extends advanced_testcase {
     /**
      * Test that we can create a message.
      */
-    public function test_create_message(){
+    public function test_create_message() {
         $this->resetAfterTest();
         $this->setUser(2);
         $manager = new manager();
@@ -51,5 +50,33 @@ class local_message_manager_test extends advanced_testcase
         $this->assertEquals('Test message', $message->messagetext);
         $this->assertEquals($type, $message->messagetype);
 
+    }
+
+    public function test_get_messages() {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setUser(2);
+        $manager = new manager();
+
+        $type = \core\output\notification::NOTIFY_SUCCESS;
+        $manager->create_message('test message1', $type);
+        $manager->create_message('test message2', $type);
+        $manager->create_message('test message3', $type);
+        $manager->create_message('test message4', $type);
+
+        $messages = $DB->get_records('local_message');
+
+        foreach ($messages as $id => $message) {
+            $manager->mark_message_read($id, 1);
+        }
+        $messagesAdmin = $manager->get_messages(2);
+        $this->assertCount(4, $messagesAdmin);
+
+        foreach ($messages as $id => $message) {
+            $manager->mark_message_read($id, 2);
+        }
+
+        $messagesAdmin = $manager->get_messages(2);
+        $this->assertCount(0, $messagesAdmin);
     }
 }

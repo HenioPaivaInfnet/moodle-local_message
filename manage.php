@@ -15,8 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
- *
+ * Pagina principal do plugin onde estão visiveis as mensagens criadas e
+ * onde estão implementadas as classes que permitem o CRUD das mensagens
  * @package   local_message
  * @copyright Henio
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,12 +26,17 @@
 require_once(__DIR__ . '/../../config.php');
 global $DB;
 
+require_login();
+$context = context_system::instance();
+require_capability('local/message:managemessages', $context);
+
 $PAGE->set_url(new moodle_url('/local/message/manage.php'));
-$PAGE->set_context(\context_system::instance());
+$PAGE->set_context($context);
 $PAGE->set_title('Gerenciar mensagens');
 $PAGE->set_heading(get_string('pluginname', 'local_message'));
+$PAGE->requires->js_call_amd('local_message/confirm');
 
-$messages = $DB->get_records('local_message');
+$messages = $DB->get_records('local_message', null, 'id');
 
 
 echo $OUTPUT->header();

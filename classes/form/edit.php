@@ -30,25 +30,25 @@ require_once("$CFG->libdir/formslib.php");
 
 class edit extends moodleform{
 
-    public function definition(){
+    public function definition() {
         $mform = $this->_form;
-    
-        $mform->addElement('text', 'messagetext', get_string('message_text','local_message'));
+        $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
+        $mform->addElement('text', 'messagetext', get_string('message_text', 'local_message'));
         $mform->setType('messagetext', PARAM_NOTAGS);
         $mform->setDefault('messagetext', get_string('message_content', 'local_message'));
-        
         
         $choices = array();
         $choices['0'] = \core\output\notification::NOTIFY_INFO;
         $choices['1'] = \core\output\notification::NOTIFY_SUCCESS;
         $choices['2'] = \core\output\notification::NOTIFY_WARNING;
         $choices['3'] = \core\output\notification::NOTIFY_ERROR;
-        $mform->addElement('select', 'messagetype', get_string('message_type','local_message'), $choices);
+        $mform->addElement('select', 'messagetype', get_string('message_type', 'local_message'), $choices);
         $mform->setDefault('messagetype', '0');
         $this->add_action_buttons();
     }
 
-    function validation($data, $files){
+    function validation($data, $files) {
         return array();
     }
 }
